@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="299abf1c-d971-4306-8ee2-ba7ab0e55da2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GDAX_Trader.py" beforeDir="false" afterPath="$PROJECT_DIR$/GDAX_Trader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/betcsv.csv" beforeDir="false" afterPath="$PROJECT_DIR$/betcsv.csv" afterDir="false" />
-    </list>
+    <list default="true" id="299abf1c-d971-4306-8ee2-ba7ab0e55da2" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,8 +36,8 @@
       <file leaf-file-name="betcsv.csv" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/betcsv.csv">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="425">
+              <caret line="25" column="75" selection-start-line="25" selection-start-column="75" selection-end-line="25" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -237,12 +232,12 @@
       <workItem from="1531244510414" duration="2957000" />
       <workItem from="1531287221327" duration="8978000" />
       <workItem from="1531296353573" duration="10779000" />
-      <workItem from="1531318668934" duration="6769000" />
+      <workItem from="1531318668934" duration="7431000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72995000" />
+    <option name="totallyTimeSpent" value="73657000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -522,8 +517,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/betcsv.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="425">
+          <caret line="25" column="75" selection-start-line="25" selection-start-column="75" selection-end-line="25" selection-end-column="75" />
         </state>
       </provider>
     </entry>
