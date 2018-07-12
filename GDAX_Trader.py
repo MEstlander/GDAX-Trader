@@ -4,16 +4,17 @@ from websocket import create_connection
 '''
 [Low, High, Time placed, phase, buy/sell, stoploss, time when traded, trade price, placeholder]
 '''
-amt = 15
+amt = 60
 betA = []
-betfrequency=2
-Limit=0.01
-margin=0.002
-takerFee=0.003
-lifespan=betfrequency*amt
-for i in range(0,amt):
+betfrequency = 2
+Limit = 0.01
+margin = 0.002
+takerFee = 0.003
+lifespan = betfrequency*amt
+for i in range(0, amt):
     betA.append([])
 print("Lifespan: {} minutes".format(lifespan))
+
 
 class myWebsocketClient(gdax.WebsocketClient):
     def on_open(self):
@@ -33,7 +34,6 @@ class myWebsocketClient(gdax.WebsocketClient):
 
         print(self.channels)
 
-        #print("Lets count the messages!")
     def _connect(self):
         sub_params = {
             "type": "subscribe",
@@ -56,7 +56,7 @@ class myWebsocketClient(gdax.WebsocketClient):
     def on_message(self, msg):
         self.message_count += 1
         if 'price' in msg and 'type' in msg and msg['product_id'] == 'ETH-EUR':
-            print ("Price: {:.2f}".format(float(msg["price"])))
+            print("Price: {:.2f}".format(float(msg["price"])))
             lastprice=float(msg["price"])
             if self.bet:
                 self.bet=False
@@ -66,37 +66,43 @@ class myWebsocketClient(gdax.WebsocketClient):
                         betA[self.betnumber][9]=lastprice
                         secondBet(betA[self.betnumber],lastprice)
                 betA[self.betnumber] = placeBet(lastprice, str(datetime.datetime.utcnow())[:-7])
-                if self.betnumber==(amt-1):
-                    self.betnumber=0
+                if self.betnumber == (amt-1):
+                    self.betnumber = 0
                 else:
-                    self.betnumber+=1
-
+                    self.betnumber += 1
             for bet in betA:
                 if bet:
                     checkBet(bet, lastprice)
     def on_close(self):
         print("-- Goodbye! --")
+
+
 def placeBet(price, time):
     lowbet = price*(1-margin)
     highbet = price*(1+margin)
     print("Buy: {:.2f}".format(float(lowbet)), "Sell: {:.2f}".format(float(highbet)))
     return [time,lowbet, highbet, False,"","",0.0,price,"",0.0,True]
+
+
 '''[Time placed, Low, High, Phase, time when hit, Buy or sell, Stoploss,  Price, Close time, Close Price,active
     0              1    2      3        4           5           6           7       8           9           10'''
 
+
 def checkBet(bet, price):
     if bet[3]:
-        secondBet(bet,price)
+        if bet[10]:
+            secondBet(bet, price)
     else:
-        if bet[1]<price<bet[2]:
+        if bet[1] < price < bet[2]:
             return
         elif price >= bet[2]:
-            bet[5]="sell"
+            bet[5] = "sell"
         else:
-            bet[5]="buy"
-        bet[3]=True
-        bet[4]=str(datetime.datetime.utcnow())[:-7]
+            bet[5] = "buy"
+        bet[3] = True
+        bet[4] = str(datetime.datetime.utcnow())[:-7]
         betHit(bet)
+
 
 def betHit(bet):
     if bet[5]=="sell":
@@ -106,32 +112,35 @@ def betHit(bet):
     bet[6]=stoploss
     print(bet)
 
+
 def secondBet(bet,price):
-    if bet[5]=="sell":
+    if bet[5] == "sell":
         if float(price)>float(bet[6]) and bet[10]:
             print("Stoploss hit")
-            bet[9]=bet[6]*(1+takerFee)
-            bet[10]=False
+            bet[9] = bet[6]*(1+takerFee)
+            bet[10] = False
         if float(price)<float(bet[7]) and bet[10]:
-            bet[9]=bet[7]
-            bet[10]=False
-            print("Winner winner chicken dinner")
-        if not bet[10]:
-            bet[8]=str(datetime.datetime.utcnow())[:-7]
-            print(bet)
-    else:
-        if float(price)<float(bet[6]) and bet[10]:
-            print("Stoploss hit")
-            bet[9]=bet[6]*(1-takerFee)
-            bet[10]=False
-        if float(price)>float(bet[7]) and bet[10]:
-            bet[9]=bet[7]
-            bet[10]=False
+            bet[9] = bet[7]
+            bet[10] = False
             print("Winner winner chicken dinner")
         if not bet[10]:
             bet[8]=str(datetime.datetime.utcnow())[:-7]
             print(bet)
             writeToCSV(bet)
+    else:
+        if float(price)<float(bet[6]) and bet[10]:
+            print("Stoploss hit")
+            bet[9] = bet[6]*(1-takerFee)
+            bet[10] = False
+        if float(price)>float(bet[7]) and bet[10]:
+            bet[9] = bet[7]
+            bet[10] = False
+            print("Winner winner chicken dinner")
+        if not bet[10]:
+            bet[8] = str(datetime.datetime.utcnow())[:-7]
+            print(bet)
+            writeToCSV(bet)
+
 
 def writeToCSV(bet):
     with open("betcsv.csv",'a', newline='') as csvfile:
@@ -141,6 +150,7 @@ def writeToCSV(bet):
     write to csv "Timestamp when placed", "Timestamp of first thing", Timestamp of finish",
     "Price at placing", "Sell or buy price", "Ended by profit or loss"
     '''
+
 
 wsClient = myWebsocketClient()
 wsClient.start()
@@ -153,8 +163,15 @@ with open(file,'w', newline='') as csvfile:
 '''
 while True:
     if datetime.datetime.now().minute % betfrequency == 0:
-        wsClient.bet=True
+        wsClient.bet = True
     #do algorithm
     time.sleep(60)
-
+'''
 #wsClient.close()
+bet = placeBet(300, str(datetime.datetime.utcnow())[:-7])
+checkBet(bet, bet[1])
+secondBet(bet, 301)
+
+bet = ['2018-07-11 15:01:03', 299.4, 300.6, True, '2018-07-11 15:01:03', 'buy', 296.40599999999995, 300, '', 0.0, True]
+writeToCSV(bet)
+'''
